@@ -288,13 +288,15 @@ class MyJson {
         val result = obj.entries.joinToString(",\n    ") { (key, value) ->
             if (value is String) {
                 "\"$key\": \"$value\""
+            } else if (value is List<*> && value.size >= 1) {
+                "\"$key\": [\n  ${value.joinToString(",\n  ") { data -> "${if (data is String) "    \"$data\"" else data}" }}\n    ]"
             } else if (value is List<*>) {
-                "\"$key\": [\n${value.joinToString(",\n") { data -> "${if (data is String) "\"$data\"" else data}" }}\n]"
+                "\"$key\": []"
             } else {
                 "\"$key\": $value"
             }
         }
-        return "\n{\n    $result\n}\n"
+        return "\n  {\n    $result\n  }\n"
     }
 }
 
